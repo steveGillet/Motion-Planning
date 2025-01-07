@@ -1,0 +1,60 @@
+#include "AMPCore.h"
+#include "hw/HW8.h"
+#include "MyMultiAgentPlanners.h"
+#include <fstream>
+#include <iomanip>
+
+using namespace amp;
+
+int main(int argc, char** argv) {
+    // Parameters
+    int numSimulations = 100;
+    int n = 7500;
+    double r = 0.5;
+    double epsilon = 0.25;
+    double p_goal = 0.05;
+    int numAgents = 6;
+
+    // Open CSV file to store results
+    std::string filePath = "/home/steve0gillet/Desktop/algMotionPlanning/hw8/benchmarkCentralized" + std::to_string(numAgents) + ".csv";
+    std::ofstream csvFile(filePath);
+
+    csvFile << "Simulation,ComputationTime,TreeSize\n"; // Header
+
+    // Loop for 100 simulations
+    for (int sim = 1; sim <= numSimulations; ++sim) {
+        std::cout << "Running simulation " << sim << "/" << numSimulations << std::endl;
+
+        // Initialize Workspace 1 with 2 agents for each simulation
+        amp::RNG::seed(amp::RNG::randiUnbounded());  // Randomize each run
+        MultiAgentProblem2D problem = HW8::getWorkspace1(numAgents);
+
+        // Measure time using the AMP timer
+        amp::Timer timer("sim_timer");
+
+        // Solve using a centralized approach
+        MyCentralPlanner central_planner;
+        MultiAgentPath2D path = central_planner.plan(problem);
+        
+        // Stop the timer after planning
+        double computationTime = timer.now(TimeUnit::ms);
+        
+        // Count the number of nodes in the RRT tree
+        int treeSize = 0;
+        for(auto agentPath : path.agent_paths){
+            treeSize += agentPath.length();
+        }
+
+        // Save results to the CSV file
+        csvFile << sim << "," << std::fixed << std::setprecision(2) 
+                << computationTime << "," << treeSize << "\n";
+
+        // Visualize each solution if needed
+        // Visualizer::makeFigure(problem, path, collision_states);
+    }
+
+    csvFile.close(); // Close the CSV file after all simulations
+    std::cout << "Benchmarking complete. Results saved to benchmark_results.csv" << std::endl;
+
+    return 0;
+}

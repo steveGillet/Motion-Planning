@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage[a4paper, margin=1in]{geometry}
+\title{Project Proposal \\ \large Quadcopter Drone Kinodynamical Motion Planning}
+\author{Steve Gillet}
+\date{\today}
+
+% Custom information
+\newcommand{\className}{Course: Algorithmic Motion Planning – ASEN 5254-001 – Fall 2024}
+\newcommand{\professorName}{Professor: Morteza Lahijanian}
+\newcommand{\taName}{Teaching Assistant: Yusif Razzaq}
+
+\begin{document}
+
+\maketitle
+
+\section*{Overview}
+The goal of this project is to take the dynamics for a quadcopter that I developed in another class (Linear Control Systems) and use them to develop kinodynamical motion planning for a quadcopter.
+I will have to add kinodymical constraints and probably adapt the dynamics that I already have in other ways to make them fit the problem here.
+I think the ultimate plan is to be able to come up with something like a delivery plan for a quadcopter dropping off packages from a delivery truck or some similar problem with multiple waypoints.
+
+\section*{Project Subproblems}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+    \item \textbf{3D Motion Planning:} The first step is to develop motion planning in 3 dimensions. This primarily should be an adaptation of code and techniques that I have already applied in this class, however the significant challenge here will be developing my own structure outside of the toolbox we used in class to build upon.
+    
+    \item \textbf{Kinodynamical 3D Motion Planning:} The next step will be to implement kinodynamical constraints unto the 3 dimensional motion planning. I'll try to adapt the dynamics that I already developed onto the problem and probably start with the most simple constraints just to get the system working.
+    
+    \item \textbf{Task Planning and Advanced Kinodynamics:} The advanced goal will be to use some kind of task planning to plan more complicated tasks such as multiple motion plan routes or task constraints like returning to base or recharging. I also want to take the time to flesh out the kinodynamics more fully and add any advanced kinodynmics that I left out in the last step to get the job done.
+    
+    \item \textbf{Advanced Task and Motion Planning:} As a stretch goal I'd like to increase the complexity of the tasks and motion plans. Implement moving obstacles or multiple agents.
+\end{enumerate}
+
+\end{document}
