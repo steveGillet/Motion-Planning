@@ -410,28 +410,6 @@ aStar kinoRRT(Problem3D& problem, kinoAgent& agent, int& n, double& epsilon, dou
             } 
         }
 
-        // // // // // ANALYTICAL PSEUDO INVERSE B SOLUTION // // // //
-
-        // Eigen::VectorXd potentialControl(4);
-        // Eigen::VectorXd xDot = (point - qNear) / dt;
-        // std::cout << "Sampled Point: " << point << std::endl << "Nearest Neighbor: " << qNear << std::endl << "DT: " << dt << std::endl; 
-        // potentialControl = agent.B.completeOrthogonalDecomposition().pseudoInverse() * (xDot - agent.A * qNear); 
-        // std::cout << "A*qNear: " << agent.A * qNear << std::endl;
-        
-        // std::cout << "control: " << potentialControl << std::endl;
-        // Eigen::VectorXd xDotActual = agent.A * qNear + agent.B * potentialControl;
-        // std::cout << "xDot: " << xDot << ", xDotActual: " << xDotActual << std::endl;
-        // // potentialControl << agent.m*(point[3] - qNear[3])/dt, agent.m*(point[4] - qNear[4])/dt, agent.m*(point[5] - qNear[5])/dt + agent.m*agent.g;
-        // bool controlInBounds = true;
-
-        // for (int i = 0; i < agent.controlLowerBounds.size(); i++){
-        //     if (potentialControl[i] < agent.controlLowerBounds[i]) controlInBounds = false;
-        // }
-        // for (int i = 0; i < agent.controlUpperBounds.size(); i++){
-        //     if (potentialControl[i] > agent.controlUpperBounds[i]) controlInBounds = false;
-        // }
-        // // std::vector<double> potentialDts;
-
         // // // // // MINIMUM ENERGY SOLUTION // // // //
 
         std::uniform_real_distribution<> randomDT(1, 10);
@@ -463,88 +441,6 @@ aStar kinoRRT(Problem3D& problem, kinoAgent& agent, int& n, double& epsilon, dou
             }
             if (controlInvalid) break;
         }
-
-
-        // // // // // // RANDOM SOLUTION // // // //
-
-        // std::vector<Eigen::VectorXd> potentialControls;
-        // std::vector<Eigen::VectorXd> potentialQnews;
-        // std::vector<double> potentialDts;
-        // int maxAttempts = 200; // will probably have to implement if an infinite loop happens
-        // int controlCounter = 0;
-
-        // while(potentialControls.size() < uSamples && controlCounter < maxAttempts){
-        //     Eigen::VectorXd control(agent.controls.size());
-        //     for (int i = 0; i < agent.controls.size(); i++) {
-        //         double lower = agent.controlLowerBounds[i];
-        //         double upper = agent.controlUpperBounds[i];
-        //         std::uniform_real_distribution<> dis(lower, upper);
-        //         control[i] = dis(gen);
-        //     }
-
-        //     std::uniform_real_distribution<> randomDT(.05, 2);
-        //     double dt = randomDT(gen);
-
-        //     Eigen::VectorXd potentialQnew = qNear;
-        //     Eigen::VectorXd previousState = potentialQnew;
-
-        //     potentialQnew = qNear + (agent.A * qNear + agent.B * control)*dt; 
-        //     // std::cout << "control: " << control << std::endl;
-        //     // std::cout << "potential q new: " << potentialQnew << std::endl;
-
-
-
-        //     bool controlInvalid = false;
-        //     for (int i = 0; i < potentialQnew.size(); i++){
-        //         if(potentialQnew[i] < agent.stateLowerBounds[i]){
-        //             controlInvalid = true;
-        //         } 
-        //         if(potentialQnew[i] > agent.stateUpperBounds[i]){
-        //             controlInvalid = true;
-        //         } 
-        //     }
-            
-        //     for (auto obstacle : problem.obstacles) {
-        //         for (auto& face : obstacle.second.faces){
-        //             if (isLineInFace(face, {{qNear[0], qNear[1], qNear[2]}, {potentialQnew[0], potentialQnew[1], potentialQnew[2]}})){
-        //                 controlInvalid = true;
-        //                 break;
-        //             } 
-        //         }
-        //         if (controlInvalid) break;
-        //     }
-
-        //     if(!controlInvalid){
-        //         potentialControls.push_back(control);
-        //         potentialQnews.push_back(potentialQnew);
-        //         potentialDts.push_back(dt);
-        //     }
-
-        //     controlCounter++;
-        // }
-
-        // if(potentialControls.size() > 0){
-            
-            // double closestDistanceToQnew = __DBL_MAX__;
-            // Eigen::VectorXd bestControl;
-            // Eigen::VectorXd qNew;
-            // double bestDt;
-            // for (int i = 0; i < potentialControls.size(); i++) {
-            //     // double distance = ((point.head<3>() - potentialQnews[i].head<3>()).norm() +
-            //     //                     0.1 * (point.tail<3>() - potentialQnews[i].tail<3>()).norm());
-            //     // double distance = (Eigen::Vector3d(point[0], point[2], point[4]) - Eigen::Vector3d(potentialQnews[i][0], potentialQnews[i][2], potentialQnews[i][4])).norm() +
-            //     //                    0.1 * (Eigen::Vector3d(point[1], point[3], point[5]) - Eigen::Vector3d(potentialQnews[i][1], potentialQnews[i][3], potentialQnews[i][5])).norm(); 
-            //     double distance = (point - potentialQnews[i]).norm();
-            //     if (distance < closestDistanceToQnew) {
-            //         closestDistanceToQnew = distance;
-            //         bestControl = potentialControls[i];
-            //         bestDt = potentialDts[i];
-            //         qNew = potentialQnews[i];
-            //     }
-            // }
-
-            // std::cout << "qNew: " << qNew << std::endl;
-            // std::cout << "best control: " << bestControl << std::endl;
 
         if(!controlInvalid){
             nodes.emplace_back(stateNode(currentNodeIndex, qNew, {}));            

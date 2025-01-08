@@ -69,6 +69,8 @@ struct kinoAgent{
     Eigen::VectorXd controlLowerBounds;
     Eigen::MatrixXd A;
     Eigen::MatrixXd B;
+    Eigen::MatrixXd K;
+    Eigen::MatrixXd F;
     double m;
     double g;
 };
