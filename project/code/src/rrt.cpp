@@ -409,6 +409,14 @@ aStar kinoRRT(Problem3D& problem, kinoAgent& agent, int& n, double& epsilon, dou
                 closestDistance = currentDistance;
             } 
         }
+        // // // // // CLOSED LOOP SOLUTION // // // //
+
+        Eigen::VectorXd qNew = qNear;
+        while ((Eigen::Vector3d(point[0], point[2], point[4]) - Eigen::Vector3d(qNew[0], qNew[2], qNew[4])).norm() > epsilon) {
+            Eigen::VectorXd control = agent.F * point - agent.K * qNew;
+            Eigen::VectorXd xDot = agent.A * qNew + agent.B * control;
+            qNew = qNear + xDot;
+        }
 
         // // // // // MINIMUM ENERGY SOLUTION // // // //
 
